@@ -1,16 +1,32 @@
+from dotenv import load_dotenv
 import os
 import shutil
 import zipfile
 
 project_list = [
-    "PR13128", "PR17647", "PR18198", "PR18762",
-    "PR18772", "PR18773", "PR18838", "PR23978",
-    "PR24457", "PR30602", "PR32891", "PR34007",
+    "PR13128",
+    "PR17647",
+    "PR18198",
+    "PR18762",
+    "PR18772",
+    "PR18773",
+    "PR18838",
+    "PR23978",
+    "PR24457",
+    "PR30602",
+    "PR32891",
+    "PR34007",
 ]
 
-base_network_path = r""
+base_network_path = os.getenv("NETWORK_PATH")
 output_root = r"C:\temp\projects_output"
 zip_path = r"C:\temp\projects.zip"
+
+if not base_network_path:
+    print(
+        "Error: NETWORK_PATH not set in .env, please create a .env file with the following content: NETWORK_PATH=YOUR_NETWORK_PATH"
+    )
+    exit(1)
 
 os.makedirs(output_root, exist_ok=True)
 
@@ -42,7 +58,6 @@ with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
             for file in files:
                 full_path = os.path.join(root, file)
 
-                # keep folder structure in zip
                 arcname = os.path.relpath(full_path, output_root)
 
                 zipf.write(full_path, arcname)
